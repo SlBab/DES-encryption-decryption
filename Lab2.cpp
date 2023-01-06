@@ -7,10 +7,10 @@
 #include <vector>
 using namespace std;
 
-string round_keys[16];	// Массив для 16 ключей
-string pt;  // Исходный текст в двоичном представлении
+string round_keys[16];	// Array for 16 keys
+string pt;  // Initial text in binary form
 
-string strToBits(const string str)	// Функция перевода строки символов в бинарный вид
+string strToBits(const string str)	// Function for converting a string into binary form
 {
 	string bits = "";
 	for (std::size_t i = 0; i < str.size(); ++i)
@@ -20,7 +20,7 @@ string strToBits(const string str)	// Функция перевода строк
 	return bits;
 }
 
-string DecimalToBinary(int decimal)	// Функция перевода из десятичной СС в двоичную
+string DecimalToBinary(int decimal)	// Function of translation from decimal to binary number system
 {
 	string binary;
     while(decimal != 0) {
@@ -33,7 +33,7 @@ string DecimalToBinary(int decimal)	// Функция перевода из де
     return binary;
 }
 
-int BinaryToDecimal(string binary)	// Функция перевода из двоичной СС в десятичную
+int BinaryToDecimal(string binary)	// Function of translation from binary to decimal number system
 {
     int decimal = 0;
 	int counter = 0;
@@ -48,7 +48,7 @@ int BinaryToDecimal(string binary)	// Функция перевода из дв�
 	return decimal;
 }
 
-int step(int x)
+int step(int x) // Exponentiation
 {
 	int c = 1;
 	for (int i = 0; i < x; i++)
@@ -56,7 +56,7 @@ int step(int x)
 	return c;
 }
 
-string BinaryToString(string block)
+string BinaryToString(string block) // Function for converting a binary into string form
 {
 	int c = 0, l = 7;
 	string out = "";
@@ -75,7 +75,7 @@ string BinaryToString(string block)
 	return out;
 }
 
-string shift_left_once(string key_chunk)	// Функция сдвига влево на 1 пробел
+string shift_left_once(string key_chunk)	// Shift function to the left by 1
 { 
     string shifted="";  
         for(int i = 1; i < 28; i++){ 
@@ -85,7 +85,7 @@ string shift_left_once(string key_chunk)	// Функция сдвига влев
     return shifted; 
 } 
 
-string shift_left_twice(string key_chunk)	// Функция сдвига влево на 2 пробела
+string shift_left_twice(string key_chunk)	// Shift function to the left by 2
 { 
     string shifted=""; 
     for(int i = 0; i < 2; i++){ 
@@ -99,7 +99,7 @@ string shift_left_twice(string key_chunk)	// Функция сдвига вле�
     return key_chunk; 
 }
 
-string Xor(string a, string b)	// Функция логического вычитания
+string Xor(string a, string b)	// Logical subtraction function
 { 
 	string result = ""; 
 	int size = b.size();
@@ -114,7 +114,7 @@ string Xor(string a, string b)	// Функция логического вычи
 	return result; 
 } 
 
-void generate_keys(string key)	// Функция для генерации 16 ключей
+void generate_keys(string key)	// Function for generating 16 keys
 {
 	int pc1[56] = {
 		57,49,41,33,25,17,9, 
@@ -167,7 +167,7 @@ void generate_keys(string key)	// Функция для генерации 16 к
 	} 
 }
 
-int initial_permutation[64] =  // Таблица для начальной перестановки
+int initial_permutation[64] =  // Table for the initial permutation
 {
 	58,50,42,34,26,18,10,2,
 	60,52,44,36,28,20,12,4,
@@ -179,7 +179,7 @@ int initial_permutation[64] =  // Таблица для начальной пе�
 	63,55,47,39,31,23,15,7
 };
 
-int expansion_table[48] = 	// Функция расширения
+int expansion_table[48] = 	// Expansion function
 {
 	32,1,2,3,4,5,4,5,
 	6,7,8,9,8,9,10,11,
@@ -189,7 +189,7 @@ int expansion_table[48] = 	// Функция расширения
 	28,29,28,29,30,31,32,1
 };
 
-int substition_boxes[8][4][16] = // Таблицы замен
+int substition_boxes[8][4][16] = // Substitution tables
 { 
 	{
 		14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7,
@@ -241,7 +241,7 @@ int substition_boxes[8][4][16] = // Таблицы замен
 	} 
 };
 
-int permutation_tab[32] =	// Таблица перестановки
+int permutation_tab[32] =	// Permutation table
 {	
 	16,7,20,21,29,12,28,17,
 	1,15,23,26,5,18,31,10,
@@ -249,7 +249,7 @@ int permutation_tab[32] =	// Таблица перестановки
 	19,13,30,6,22,11,4,25
 };
 
-int inverse_permutation[64] =	// Таблица финальной перестановки
+int inverse_permutation[64] =	// Inverse permutation table
 {
 	40,8,48,16,56,24,64,32,
 	39,7,47,15,55,23,63,31,
@@ -263,7 +263,7 @@ int inverse_permutation[64] =	// Таблица финальной перест�
 
 string DES()
 { 
-	// Добавляем биты, если необходимо
+	// Adding bits if necessary
 	string out = "";
 	for (int g = 0; g * 64 < pt.length(); g++)
 	{
@@ -277,24 +277,24 @@ string DES()
 		}
 
 		string perm = "";
-		for(int i = 0; i < 64; i++) // Начальная перестановка
+		for(int i = 0; i < 64; i++) // Initial permutation
 			perm += block[initial_permutation[i] - 1];
 		
-		// Делим результат на 2 подблока
+		// Dividing the result into two subblocks
 		string left = perm.substr(0, 32); 
 		string right = perm.substr(32, 32);
 	
-		for(int i = 0; i < 16; i++) // Кодируем исходный текст 16 раз
+		for(int i = 0; i < 16; i++) // Coding the source text 16 times
 		{ 
     		string right_expanded = ""; 
 		
-    		for(int i = 0; i < 48; i++) // Расширяющая перестановка правого блока
+    		for(int i = 0; i < 48; i++) // Expanding right block reshuffle
       			right_expanded += right[expansion_table[i]-1]; 
 		
-			string xored = Xor(round_keys[i], right_expanded);  // XOR результата расширения с ключом
+			string xored = Xor(round_keys[i], right_expanded);  // XOR of the expansion result and the key
 			string res = ""; 
 		
-			for(int i = 0; i < 8; i++)	// Результат разделяется на 8 частей и проходит через 8 таблиц замен
+			for(int i = 0; i < 8; i++)	// The result is divided into 8 parts and passed through 8 substitution tables
 			{ 
       			string row1= xored.substr(i*6,1) + xored.substr(i*6 + 5,1);
       			int row = BinaryToDecimal(row1);
@@ -305,23 +305,23 @@ string DES()
 			} 
 		
 			string perm2 =""; 
-			for(int i = 0; i < 32; i++)	// Перестановка
+			for(int i = 0; i < 32; i++)	// Permutation
 				perm2 += res[permutation_tab[i]-1]; 
 		
-			xored = Xor(perm2, left); // XOR результата расширения с ключом
+			xored = Xor(perm2, left); // XOR of the expansion result and the key
 			left = xored; 
 
-			if(i < 15)	// Смена левой и правой части исходного сообщения 
+			if(i < 15)	// Changing the left and right part of the original message 
 			{ 
 				left = right;
 				right = xored;
 			} 
 		} 
-		// Объединение частей
+		// Merging parts
 		string combined_text = left + right;   
 		string ciphertext =""; 
 	
-		for(int i = 0; i < 64; i++)	// Обратная начальная перестановка
+		for(int i = 0; i < 64; i++)	// Inverse initial permutation
 			ciphertext+= combined_text[inverse_permutation[i]-1]; 
 
 		out += ciphertext;
@@ -336,18 +336,18 @@ int main()
 	ifstream Input("Input.txt");
 	if (!Input.is_open())
 	{
-		std::cout << " Ошибка открытия файла" << endl;
+		std::cout << " Error: cannot open the file" << endl;
 		exit(0);
 	}
 
 	ofstream Output("Output.txt");
 	if (!Output.is_open())
 	{
-		std::cout << " Ошибка открытия файла" << endl;
+		std::cout << " Error: cannot open the file" << endl;
 		exit(0);
 	}
 
-	string key = "1010101010111011000010010001100000100111001101101100110011011101"; // 64 битный ключ
+	string key = "1010101010111011000010010001100000100111001101101100110011011101"; // 64 bit key
 	string plain = "", buf = "";
 
 	while (!Input.eof())
@@ -356,17 +356,17 @@ int main()
 		plain += buf;
 	}
 
-	std::cout << "\n Исходное сообщение: " << plain;
-	pt = strToBits(plain);  // Перевод исходного сообщения в двоичную форму
-	std::cout << "\n Исходное сообщение: " << pt;
+	std::cout << "\n Initial message: " << plain;
+	pt = strToBits(plain);  // Converting initial message into binary form
+	std::cout << "\n Initial message(binary): " << pt;
 
-  	generate_keys(key); // Вызов функции для генерации 16 ключей
-    string ct = DES(); // Вызов алгоритма
+  	generate_keys(key); // Calling funcion for generationg 16 keys
+    	string ct = DES(); // Calling algorythm
 
-	Output << "\n\n Зашифрованный текст: " << BinaryToString(ct) << endl; // Вывод зашифрованного текста
-	std::cout << "\n\n Зашифрованный текст: " << BinaryToString(ct) << endl;
+	Output << "\n\n Encrypted text: " << BinaryToString(ct) << endl;
+	std::cout << "\n\n Encrypted text: " << BinaryToString(ct) << endl;
 	
-	// Инвертируем ключи перестановок для дешифрации
+	// Inverting round keys for decryption
 	int i = 15; 
 	int j = 0;
 	while(i > j)
@@ -378,10 +378,10 @@ int main()
 		j++;
 	}
 	pt = ct;
-	string decrypted = DES(); // Вызов алгоритма для дешифрации полученного сообщения
+	string decrypted = DES(); // Decryption
 
-	Output << "\n Дешифрованный текст:" << BinaryToString(decrypted) << endl;  // Вывод и сравнение дешифрованного текста с исходным
-	std::cout << "\n Дешифрованный текст:" << BinaryToString(decrypted) << endl;
+	Output << "\n Decrypted message:" << BinaryToString(decrypted) << endl;
+	std::cout << "\n Decrypted message:" << BinaryToString(decrypted) << endl;
 	
 	return 0;
 }
